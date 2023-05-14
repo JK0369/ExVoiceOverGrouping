@@ -14,15 +14,17 @@ class ViewController: UIViewController {
         label.font = .systemFont(ofSize: 18, weight: .regular)
         label.numberOfLines = 0
         label.textAlignment = .center
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     private let firstBottomLabel: UILabel = {
         let label = UILabel()
-        label.text = "desk1"
+        label.text = "desc1"
         label.font = .systemFont(ofSize: 18, weight: .regular)
         label.numberOfLines = 0
         label.textAlignment = .center
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -32,6 +34,7 @@ class ViewController: UIViewController {
         label.font = .systemFont(ofSize: 18, weight: .regular)
         label.numberOfLines = 0
         label.textAlignment = .center
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -41,15 +44,23 @@ class ViewController: UIViewController {
         label.font = .systemFont(ofSize: 18, weight: .regular)
         label.numberOfLines = 0
         label.textAlignment = .center
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
 
         setupLayout()
-        setupAccessibilityLabel1()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("viewDidAppear")
+//        setupAccessibilityLabel()
+        setupAccessibilityLabel2()
     }
     
     private func setupLayout() {
@@ -72,10 +83,37 @@ class ViewController: UIViewController {
         ])
     }
 
-    private func setupAccessibilityLabel1() {
-        secondTopLabel.accessibilityLabel = "title: \(secondTopLabel.text!)"
-        secondTopLabel.accessibilityHint = "This is title of app1"
-        secondTopLabel.accessibilityLabel = "title: \(secondTopLabel.text!)"
-        secondTopLabel.accessibilityHint = "This is title of app2"
+    private func setupAccessibilityLabel() {
+        var elements = [Any]()
+        
+        elements.append(firstTopLabel)
+        elements.append(firstBottomLabel)
+        
+        elements.append(secondTopLabel)
+        elements.append(secondBottomLabel)
+        
+        accessibilityElements = elements
+    }
+    
+    private func setupAccessibilityLabel2() {
+        var elements = [Any]()
+        
+        let group1 = UIAccessibilityElement(accessibilityContainer: self)
+        group1.accessibilityLabel = "\(firstTopLabel.text!), \(firstBottomLabel.text!)"
+        group1.accessibilityFrameInContainerSpace = firstTopLabel.frame.union(firstBottomLabel.frame)
+        
+        elements.append(group1)
+        elements.append(firstTopLabel)
+        elements.append(firstBottomLabel)
+        
+        let group2 = UIAccessibilityElement(accessibilityContainer: self)
+        group2.accessibilityLabel = "\(secondTopLabel.text!), \(secondBottomLabel.text!)"
+        group2.accessibilityFrameInContainerSpace = secondTopLabel.frame.union(secondBottomLabel.frame)
+
+        elements.append(group2)
+        elements.append(secondTopLabel)
+        elements.append(secondBottomLabel)
+        
+        accessibilityElements = elements
     }
 }
